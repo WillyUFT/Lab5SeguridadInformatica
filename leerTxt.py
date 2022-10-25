@@ -8,7 +8,7 @@ def leer_texto(archivo):
 
 
 def escribir_texto_salida(texto):
-    txtSalida = open('mensajeSeguro.txt', 'w', encoding='utf-8')
+    txtSalida = open('mensajerecibido.txt', 'w', encoding='utf-8')
     txtSalida.write(texto)
     txtSalida.close()
     return texto

@@ -25,7 +25,7 @@ client.connect(address)
 # Boton para ver si podemos leer el txt de entrada
 puedeLeerTexto = False
 
-mensajeEntradaTxt = "mensajedeentrada.txt"
+mensajeEntradaTxt = "mensajeentrada.txt"
 
 # Función para leer el txt, encriptarlo y descriptarlo con DES
 def txt_des():
