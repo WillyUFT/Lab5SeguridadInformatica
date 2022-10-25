@@ -1,1 +1,4 @@
-cec758e9e40c02ce354cc2725e3edd9963838f36bb294ef7ebff10519d3e6dfefafaccc2388209a89bfc3c160fa333d8bc74ed47b888dbc3e995c0369c3e0d18
+Encriptación mediante AES
+Mensaje de entrada: MENSAJEXD
+Texto encriptado: b'%\xf0h\x8e\xa9\xd7\xcf\xd0\x1a'
+Texto Desencriptado: MENSAJEXD

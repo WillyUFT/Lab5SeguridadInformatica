@@ -1,10 +1,12 @@
 # Importamos la librería del hash
 import hashlib as hl
+# Importamos la Crypto y los encriptados
+from Crypto.Cipher import DES, DES3, AES
+# Importamos los secretos
+from secrets import token_bytes
 
 # Cifrado rot
-
-
-def rotN(mensaje, n):
+def rot_n(mensaje, n):
     # String mensaje
     mensajeCifrado = ""
     # En caso de que el rot indicado sea menor a 0
@@ -33,13 +35,11 @@ abc = [chr(i) for i in range(65, 65 + 26)] * 2
 columnas = abc[:26]
 for i in range(26):
     llaveFila = abc[i]
-    valoresFila = abc[i: i + 26]
+    valoresFila = abc[i : i + 26]
     # Se crea un diccionario gigante que contiene toda la tabla de la forma A:{A:A,B:B} , etc.
     tabla[llaveFila] = dict(zip(columnas, valoresFila))
 
 # Cifrado Vignere
-
-
 def vigenere(mensaje, llave):
     # String del mensaje
     mensajeCifrado = ""
@@ -73,15 +73,68 @@ def hash(mensaje):
     mensajeHasheadoHex = mensajeHasheado.hexdigest()
     return mensajeHasheadoHex
 
+# Generamos key para el des
+keyDes = token_bytes(8)
 # Función para encriptar con DES
+def encriptar_des(mensaje):
+    cipher = DES.new(keyDes, DES.MODE_EAX)
+    nonce = cipher.nonce
+    mensajeCifrado, tag = cipher.encrypt_and_digest(mensaje.encode("ascii"))
+    return nonce, mensajeCifrado, tag
 
+
+# Función para desencriptar con DES
+def desencriptar_des(nonce, mensajeCifrado, tag):
+    cipher = DES.new(keyDes, DES.MODE_EAX, nonce=nonce)
+    mensajeDescrifrado = cipher.decrypt(mensajeCifrado)
+    try:
+        cipher.verify(tag)
+        return mensajeDescrifrado.decode("ascii")
+    except:
+        return False
+
+
+# Generamos key para el 3des
+key3Des = token_bytes(24)  # 24 bytes
+# Función para encriptar con 3DES
+def encriptar_3des(mensaje):
+    cipher = DES3.new(key3Des, DES3.MODE_EAX)
+    nonce = cipher.nonce
+    mensajeCifrado = cipher.encrypt(mensaje.encode("ascii"))
+    return nonce, mensajeCifrado
+
+
+# Función para desencriptar con 3DES
+def desencriptar_3des(nonce, mensajeCifrado):
+    cipher = DES3.new(key3Des, DES3.MODE_EAX, nonce=nonce)
+    mensajeDescifrado = cipher.decrypt(mensajeCifrado)
+    return mensajeDescifrado.decode("ascii")
+
+
+# Generamos key para el aes
+keyAes = token_bytes(16)  # 16 bytes
+# función para encriptar con AES
+def encriptar_aes(mensaje):
+    cipher = AES.new(keyAes, AES.MODE_EAX)
+    nonce = cipher.nonce
+    mensajeCifrado, tag = cipher.encrypt_and_digest(mensaje.encode("ascii"))
+    return nonce, mensajeCifrado, tag
+
+def desencriptar_aes(nonce, mensajeCifrado, tag):
+    cipher = AES.new(keyAes, AES.MODE_EAX, nonce=nonce)
+    mensajeDescifrado = cipher.decrypt(mensajeCifrado)
+    try:
+        cipher.verify(tag)
+        return mensajeDescifrado.decode("ascii")
+    except:
+        return False
 
 # Función para la red de cifrados
-def redCifrado(mensaje, password):
+def red_cifrado(mensaje, password):
     # Primero ciframos el mensaje con el rot 8
-    mensajeCifrado = rotN(mensaje, 8)
+    mensajeCifrado = rot_n(mensaje, 8)
     # Luego por vignere con la contraseña que le mandamos dle otro
     mensajeCifrado = vigenere(mensajeCifrado, password)
     # Luego un cifrado de rot 10, por si las moscas
-    mensajeCifrado = rotN(mensajeCifrado, 10)
+    mensajeCifrado = rot_n(mensajeCifrado, 10)
     return mensajeCifrado

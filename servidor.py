@@ -6,7 +6,7 @@ import socket
 import validacionesYCalculos
 
 # b del servidor
-b = 4
+b = int(input("Escoja un b, por favor: "))
 
 # Configuramos el servidor.
 port = 666  # Escojemos el puerto.
@@ -21,9 +21,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(address)
 
 # Función para comenzar la conexión.
-
-
-def comenzarConexion():
+def comenzar_conexion():
 
     print("El servidor está funcionando en " + SERVER)
 
@@ -42,21 +40,41 @@ def comenzarConexion():
         if not data:
             break
 
-        if (data[3] == "B"):
-            print("El cliente envía:\nA = " + str(data[0]) + " b = " + str(b) + " p = " + str(
-                data[1]) + " g = " + str(data[2]) + " ¿Qué vamos a calcular? " + str(data[3]))
+        if data[3] == "B":
+            print(
+                "El cliente envía:\nA = "
+                + str(data[0])
+                + " b = "
+                + str(b)
+                + " p = "
+                + str(data[1])
+                + " g = "
+                + str(data[2])
+                + " ¿Qué vamos a calcular? "
+                + str(data[3])
+            )
 
-            resultado = validacionesYCalculos.calcularAoB(
-                int(data[2]), b, int(data[1]))
+            resultado = validacionesYCalculos.calcular_a_o_b(
+                int(data[2]), b, int(data[1])
+            )
 
             conn.send(str(resultado).encode(format))
-            print('El servidor envía, B = ' + str(resultado))
+            print("El servidor envía, B = " + str(resultado))
 
-        if (data[3] == "K"):
-            print("El cliente envía:\nA = " + str(data[0]) + " b = " + str(b) + " p = " + str(
-                data[1]) + " g = " + str(data[2]) + " ¿Qué vamos a calcular? " + str(data[3]))
-            resultado = validacionesYCalculos.calcularK(
-                int(data[0]), b, int(data[1]))
+        if data[3] == "K":
+            print(
+                "El cliente envía:\nA = "
+                + str(data[0])
+                + " b = "
+                + str(b)
+                + " p = "
+                + str(data[1])
+                + " g = "
+                + str(data[2])
+                + " ¿Qué vamos a calcular? "
+                + str(data[3])
+            )
+            resultado = validacionesYCalculos.calcular_k(int(data[0]), b, int(data[1]))
 
             print("El servidor envía, K = " + str(resultado))
 
@@ -65,4 +83,4 @@ def comenzarConexion():
     conn.close()
 
 
-comenzarConexion()
+comenzar_conexion()
